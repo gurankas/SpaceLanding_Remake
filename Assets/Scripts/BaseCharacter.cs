@@ -4,14 +4,9 @@ using UnityEngine;
 
 public class BaseCharacter : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private int _shipDirection = 0;         //0=right, 1=left, 2=up, 3=down
 
-    // Update is called once per frame
-    void Update()
+    void SetShipDirection()
     {
         
     }
