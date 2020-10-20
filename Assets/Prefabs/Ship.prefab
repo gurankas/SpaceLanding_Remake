@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6741175237408809257}
   - component: {fileID: 6741175237408809252}
   - component: {fileID: 5540262146041160537}
+  - component: {fileID: 2807365049235899388}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
@@ -102,7 +103,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 3
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -146,6 +147,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b54d851f8f71ab4bad7d3172049ee66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _speed: 4
+--- !u!95 &2807365049235899388
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6739681886819768371}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 87e9a3981aea12d4ba625f4690a129b3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6740075020882554835
 GameObject:
   m_ObjectHideFlags: 0
