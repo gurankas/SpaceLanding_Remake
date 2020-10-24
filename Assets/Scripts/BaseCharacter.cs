@@ -7,133 +7,56 @@ public class BaseCharacter : MonoBehaviour
     [SerializeField]
     private float _speed = 0;
 
-    private int _shipDirection = 0;         //0=right, 1=left, 2=up, 3=down
+    [SerializeField]
+    private int _shipDirectionRange = 90;
+
+    private float _currentShipRotation = -90;
+
     private float _horizontalInput = 0;
     private float _verticalInput = 0;
     private Vector2 _movement = Vector2.zero;
     private Rigidbody2D _rb;
     private SpriteRenderer _sr;
     private Animator _anim;
-    private bool _bFacingLeft;
-    private bool _bFacingRight;
-    private bool _bFacingDown;
-    private bool _bFacingUp;
 
     private void OnEnable()
     {
         _rb = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
         _anim = GetComponent<Animator>();
-    }
 
-    void PrintShipDirection(int playerDirection)
-    {
-        switch (playerDirection)
-        {
-            case 0:
-                {
-                    print("right");
-                    break;
-                }
-            case 1:
-                {
-                    print("left");
-                    break;
-                }
-            case 2:
-                {
-                    print("up");
-                    break;
-                }
-            case 3:
-                {
-                    print("down");
-                    break;
-                }
-            default:
-                {
-                    break;
-                }
-        }
+        transform.rotation = Quaternion.Euler(0, 0, _currentShipRotation);
     }
 
     private void Update()
     {
-        if (_movement.y == 0)
-        {
-            _movement.x = Input.GetAxisRaw("Horizontal");
-        }
-        if (_movement.x == 0)
+        _movement.x = Input.GetAxisRaw("Horizontal");
+
+        if (Input.GetAxisRaw("Vertical") > 0)
         {
             _movement.y = Input.GetAxisRaw("Vertical");
         }
+        else
+        {
+            _movement.y = 0;
+        }
 
-        print(_rb.velocity);
+        //sets rotation of ship
+        _currentShipRotation -= _movement.x;
+        _currentShipRotation = Mathf.Clamp(_currentShipRotation, -_shipDirectionRange, _shipDirectionRange);
+        transform.rotation = Quaternion.Euler(0, 0, _currentShipRotation);
+        //transform.Rotate(new Vector3(0, 0, _currentShipRotation) * Time.deltaTime * _movement.x, Space.World);
 
-        SetShipDirection();
-        //PrintShipDirection(_shipDirection);
+        //applies vertical force according to direction of ship
+        var force = DetermineForceBasedOnRotation();
+        _rb.AddForce(new Vector2(force.x, force.y));
+
+        //Debug.DrawRay(transform.position, transform.up * 1000, Color.red, 2f);
     }
 
-    private void SetShipDirection()
+    private Vector3 DetermineForceBasedOnRotation()
     {
-        //We set the velocity based on the input of the player
-        //We set the y to rb.velocity.y, because if we set it to 0 our object does not move down with gravity
-        _rb.velocity = new Vector2(_movement.x * _speed, _movement.y * _speed);
 
-        //If moving left...
-        if (_movement.x < 0 && CheckIfPlayerAlreadyMoving())
-        {
-            //Flip sprite
-            _sr.flipX = true;
-            _bFacingLeft = true;
-            _shipDirection = 1; //0 = right, 1 = left, 2 = up, 3 = down
-        }
-        else if (_movement.x == 0)
-        {
-            _bFacingLeft = false;
-        }
-
-        //If moving right...
-        if (_movement.x > 0 && CheckIfPlayerAlreadyMoving())
-        {
-            //Unflip sprite
-            _sr.flipX = false;
-            _bFacingRight = true;
-            _shipDirection = 0; //0 = right, 1 = left, 2 = up, 3 = down
-        }
-        else if (_movement.x == 0)
-        {
-            _bFacingRight = false;
-        }
-
-        //If moving up...
-        if (_movement.y > 0 && CheckIfPlayerAlreadyMoving())
-        {
-            _bFacingUp = true;
-            _shipDirection = 2; //0 = right, 1 = left, 2 = up, 3 = down
-        }
-        else if (_movement.y == 0)
-        {
-            _bFacingUp = false;
-        }
-
-        //If moving down...
-        if (_movement.y < 0 && CheckIfPlayerAlreadyMoving())
-        {
-            _bFacingDown = true;
-            _shipDirection = 3; //0 = right, 1 = left, 2 = up, 3 = down
-        }
-        else if (_movement.y == 0)
-        {
-            _bFacingDown = false;
-        }
-
-        //We send this information to the animator, which handles the transition between animations
-        _anim.SetFloat("PlayerDirection", _shipDirection);
-    }
-
-    private bool CheckIfPlayerAlreadyMoving()
-    {
-        return !(_bFacingLeft || _bFacingRight || _bFacingDown || _bFacingUp);
+        return transform.up * _speed * _movement.y;
     }
 }
