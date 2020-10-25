@@ -13,22 +13,23 @@ public class BaseCharacter : MonoBehaviour
     [SerializeField]
     private int _maxFuel = 1000;
 
-    private int _fuel = 1000;
+    public int Fuel { get; protected set; }
+    public int Time { get; protected set; }
+    public int Score { get; protected set; }
+
     private float _currentShipRotation = -90;
-    private float _horizontalInput = 0;
-    private float _verticalInput = 0;
     private Vector2 _movement = Vector2.zero;
     private Rigidbody2D _rb;
-    private SpriteRenderer _sr;
     private Animator _anim;
     private bool _useFuel = false;
 
     private void OnEnable()
     {
         _rb = GetComponent<Rigidbody2D>();
-        _sr = GetComponent<SpriteRenderer>();
         _anim = GetComponent<Animator>();
-        _fuel = _maxFuel;
+        Fuel = _maxFuel;
+        Time = 0;
+        InvokeRepeating("AddTime", 1, 1);
 
         //init player ship rotation to the right
         transform.rotation = Quaternion.Euler(0, 0, _currentShipRotation);
@@ -40,7 +41,7 @@ public class BaseCharacter : MonoBehaviour
     {
         _movement.x = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetAxisRaw("Vertical") > 0 && _fuel > 0)
+        if (Input.GetAxisRaw("Vertical") > 0 && Fuel > 0)
         {
             _movement.y = Input.GetAxisRaw("Vertical");
             _useFuel = true;
@@ -61,7 +62,7 @@ public class BaseCharacter : MonoBehaviour
         var force = DetermineForceBasedOnRotation();
         _rb.AddForce(new Vector2(force.x, force.y));
 
-        print(_fuel);
+        print(Time);
 
         //Debug.DrawRay(transform.position, transform.up * 1000, Color.red, 2f);
     }
@@ -70,13 +71,28 @@ public class BaseCharacter : MonoBehaviour
     {
         if (_useFuel == true)
         {
-            _fuel -= 1;
-            _fuel = Mathf.Clamp(_fuel, 0, _maxFuel);
+            Fuel -= 1;
+            Fuel = Mathf.Clamp(Fuel, 0, _maxFuel);
         }
     }
 
     private Vector3 DetermineForceBasedOnRotation()
     {
         return transform.up * _speed * _movement.y;
+    }
+
+    public Vector2 GetSpeed()
+    {
+        return _rb.velocity * 100;
+    }
+
+    public float GetAltitude()
+    {
+        return transform.position.y * 100;
+    }
+
+    private void AddTime()
+    {
+        Time += 1;
     }
 }
