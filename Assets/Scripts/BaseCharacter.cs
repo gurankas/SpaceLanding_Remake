@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public class BaseCharacter : MonoBehaviour
@@ -22,6 +21,9 @@ public class BaseCharacter : MonoBehaviour
     private Rigidbody2D _rb;
     private Animator _anim;
     private bool _useFuel = false;
+    private bool _isDead = false;
+
+    public Action<bool> onDeathTriggered;
 
     private void OnEnable()
     {
@@ -62,9 +64,19 @@ public class BaseCharacter : MonoBehaviour
         var force = DetermineForceBasedOnRotation();
         _rb.AddForce(new Vector2(force.x, force.y));
 
-        print(Time);
+        print(_movement.y);
 
         //Debug.DrawRay(transform.position, transform.up * 1000, Color.red, 2f);
+
+        //setting variables in animators to display correct states of animations on the ship
+        _anim.SetFloat("VerticalInput", _movement.y);
+
+        //test code
+        if (Input.GetKeyDown(KeyCode.Backspace))
+        {
+            _anim.SetTrigger("Dead");
+            _isDead = true;
+        }
     }
 
     private void FixedUpdate()
@@ -94,5 +106,11 @@ public class BaseCharacter : MonoBehaviour
     private void AddTime()
     {
         Time += 1;
+    }
+
+    private void onDeath()
+    {
+        _isDead = true;
+        onDeathTriggered.Invoke(_isDead);
     }
 }
