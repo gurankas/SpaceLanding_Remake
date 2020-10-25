@@ -370,29 +370,5 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ship
       objectReference: {fileID: 0}
-    - target: {fileID: 6739681886819768371, guid: 28b599264d27f1b48b35141473b2c75e, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6740075020882554835, guid: 28b599264d27f1b48b35141473b2c75e, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6740484288609517487, guid: 28b599264d27f1b48b35141473b2c75e, type: 3}
-      propertyPath: m_Layer
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 6741175237408809252, guid: 28b599264d27f1b48b35141473b2c75e, type: 3}
-      propertyPath: m_Offset.y
-      value: 1.3077956
-      objectReference: {fileID: 0}
-    - target: {fileID: 6741175237408809252, guid: 28b599264d27f1b48b35141473b2c75e, type: 3}
-      propertyPath: m_Size.y
-      value: 1.3345473
-      objectReference: {fileID: 0}
-    - target: {fileID: 6879622505091682983, guid: 28b599264d27f1b48b35141473b2c75e, type: 3}
-      propertyPath: m_FlipY
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 28b599264d27f1b48b35141473b2c75e, type: 3}
