@@ -5,6 +5,9 @@ TextureImporter:
   - first:
       213: -3827685194314533999
     second: ShipFire_0
+  - first:
+      213: -7364125666484508024
+    second: ShipFire_0
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -49,7 +52,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 128
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -119,19 +122,19 @@ TextureImporter:
       name: ShipFire_0
       rect:
         serializedVersion: 2
-        x: 3
+        x: 2
         y: 118
-        width: 243
+        width: 244
         height: 253
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 74, y: 73, z: 78, w: 70}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1933cd0889451eac0800000000000000
-      internalID: -3827685194314533999
+      spriteID: 88aaadf19be5dc990800000000000000
+      internalID: -7364125666484508024
       vertices: []
       indices: 
       edges: []
