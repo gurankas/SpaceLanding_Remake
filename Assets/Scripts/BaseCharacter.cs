@@ -43,16 +43,11 @@ public class BaseCharacter : MonoBehaviour
         //init player ship rotation to the right
         transform.rotation = Quaternion.Euler(0, 0, _currentShipRotation);
 
-        //init rays for terrain detection
-
         //TODO apply inital force to make the ship
     }
 
     private void Update()
     {
-        Ray2D left = new Ray2D(transform.position, -transform.up - transform.right);
-        Debug.DrawRay(transform.position, -transform.up - transform.right, Color.red, 5f);
-
         _movement.x = Input.GetAxisRaw("Horizontal");
 
         if (Input.GetAxisRaw("Vertical") > 0 && Fuel > 0)
