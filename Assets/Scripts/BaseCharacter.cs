@@ -12,9 +12,6 @@ public class BaseCharacter : MonoBehaviour
     [SerializeField]
     private int _maxFuel = 1000;
 
-    [SerializeField]
-    private LayerMask _terrainMask;
-
     public int Fuel { get; protected set; }
     public int Time { get; protected set; }
     public int Score { get; protected set; }
@@ -28,7 +25,6 @@ public class BaseCharacter : MonoBehaviour
     private bool _isDead = false;
 
     public Action<bool> onDeathTriggered;
-    public Action<bool> onCameraCloseup;
 
     private void OnEnable()
     {
@@ -73,7 +69,7 @@ public class BaseCharacter : MonoBehaviour
         var force = DetermineForceBasedOnRotation();
         _rb.AddForce(new Vector2(force.x, force.y));
 
-        print(_movement.y);
+        //print(_movement.y);
 
         //Debug.DrawRay(transform.position, transform.up * 1000, Color.red, 2f);
 
