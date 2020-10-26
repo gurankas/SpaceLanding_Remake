@@ -12,6 +12,9 @@ public class BaseCharacter : MonoBehaviour
     [SerializeField]
     private int _maxFuel = 1000;
 
+    [SerializeField]
+    private float _playerMaxMinScreenHeight = 4.6f;
+
     public int Fuel { get; protected set; }
     public int Time { get; protected set; }
     public int Score { get; protected set; }
@@ -33,6 +36,7 @@ public class BaseCharacter : MonoBehaviour
         _flameSprite = GetComponentInChildren<Flame>().GetComponent<SpriteRenderer>();
         _flameSprite.gameObject.SetActive(false);
         Fuel = _maxFuel;
+
         Time = 0;
         InvokeRepeating("AddTime", 1, 1);
 
@@ -70,8 +74,6 @@ public class BaseCharacter : MonoBehaviour
         _rb.AddForce(new Vector2(force.x, force.y));
 
         //print(_movement.y);
-
-        //Debug.DrawRay(transform.position, transform.up * 1000, Color.red, 2f);
 
         //setting variables in animators to display correct states of animations on the ship
         _anim.SetFloat("VerticalInput", _movement.y);
