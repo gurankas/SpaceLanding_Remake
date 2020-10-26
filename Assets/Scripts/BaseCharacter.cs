@@ -118,4 +118,9 @@ public class BaseCharacter : MonoBehaviour
         _isDead = true;
         onDeathTriggered.Invoke(_isDead);
     }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        print("collided");
+    }
 }
