@@ -3,7 +3,7 @@
 public class Parallax : MonoBehaviour
 {
     [SerializeField]
-    private float _parallexEffect;
+    private float _parallexEffect = 0;
 
     private float length, startPos;
     private Camera _cam;
