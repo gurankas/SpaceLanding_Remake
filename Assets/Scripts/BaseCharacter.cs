@@ -12,6 +12,9 @@ public class BaseCharacter : MonoBehaviour
     [SerializeField]
     private int _maxFuel = 1000;
 
+    [SerializeField]
+    private LayerMask _terrainMask;
+
     public int Fuel { get; protected set; }
     public int Time { get; protected set; }
     public int Score { get; protected set; }
@@ -19,16 +22,20 @@ public class BaseCharacter : MonoBehaviour
     private float _currentShipRotation = -90;
     private Vector2 _movement = Vector2.zero;
     private Rigidbody2D _rb;
+    private SpriteRenderer _flameSprite;
     private Animator _anim;
     private bool _useFuel = false;
     private bool _isDead = false;
 
     public Action<bool> onDeathTriggered;
+    public Action<bool> onCameraCloseup;
 
     private void OnEnable()
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
+        _flameSprite = GetComponentInChildren<Flame>().GetComponent<SpriteRenderer>();
+        _flameSprite.gameObject.SetActive(false);
         Fuel = _maxFuel;
         Time = 0;
         InvokeRepeating("AddTime", 1, 1);
@@ -36,20 +43,27 @@ public class BaseCharacter : MonoBehaviour
         //init player ship rotation to the right
         transform.rotation = Quaternion.Euler(0, 0, _currentShipRotation);
 
+        //init rays for terrain detection
+
         //TODO apply inital force to make the ship
     }
 
     private void Update()
     {
+        Ray2D left = new Ray2D(transform.position, -transform.up - transform.right);
+        Debug.DrawRay(transform.position, -transform.up - transform.right, Color.red, 5f);
+
         _movement.x = Input.GetAxisRaw("Horizontal");
 
         if (Input.GetAxisRaw("Vertical") > 0 && Fuel > 0)
         {
             _movement.y = Input.GetAxisRaw("Vertical");
             _useFuel = true;
+            _flameSprite.gameObject.SetActive(true);
         }
         else
         {
+            _flameSprite.gameObject.SetActive(false);
             _useFuel = false;
             _movement.y = 0;
         }
