@@ -28,6 +28,12 @@ public class BaseCharacter : MonoBehaviour
     [SerializeField]
     private float _speedLandingAllowance3 = 30f;
 
+    [SerializeField]
+    private AudioClip _rocketLaunch;
+
+    [SerializeField]
+    private AudioClip _deathAudio;
+
     public int Fuel { get; protected set; }
     public int Time { get; protected set; }
     public int Score { get; protected set; }
@@ -45,12 +51,14 @@ public class BaseCharacter : MonoBehaviour
     private Animator _anim;
     private bool _useFuel = false;
     private Vector3 _startPos;
+    private AudioSource _as;
 
     private void OnEnable()
     {
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
         _flameSprite = GetComponentInChildren<Flame>().GetComponent<SpriteRenderer>();
+        _as = GetComponent<AudioSource>();
         _flameSprite.gameObject.SetActive(false);
         Fuel = _maxFuel;
         _startPos = transform.position;
@@ -91,6 +99,7 @@ public class BaseCharacter : MonoBehaviour
             _flameSprite.gameObject.SetActive(false);
             _useFuel = false;
             _movement.y = 0;
+            _as.Stop();
         }
 
         //sets rotation of ship
@@ -176,10 +185,16 @@ public class BaseCharacter : MonoBehaviour
         }
         //destroy here
         _anim.SetTrigger("Dead");
+        _as.PlayOneShot(_deathAudio);
     }
 
     private bool IsBetween(float testValue, float bound1, float bound2)
     {
         return (testValue >= Math.Min(bound1, bound2) && testValue <= Math.Max(bound1, bound2));
+    }
+
+    private void PlayRocketAudio()
+    {
+        _as.PlayOneShot(_rocketLaunch);
     }
 }
