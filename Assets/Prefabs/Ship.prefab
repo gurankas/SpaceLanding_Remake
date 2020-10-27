@@ -125,7 +125,7 @@ Transform:
   m_GameObject: {fileID: 6739681886819768371}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
   m_Children:
   - {fileID: 406907471159350935}
   m_Father: {fileID: 0}
@@ -224,6 +224,7 @@ MonoBehaviour:
   _speedLandingAllowance2: 20
   _speedLandingAllowance3: 30
   ScoreMultiplier: 0
+  FuelEmpty: 0
 --- !u!95 &2807365049235899388
 Animator:
   serializedVersion: 3

@@ -7,11 +7,17 @@ public class FarCamera : MonoBehaviour
 
     private void OnEnable()
     {
-        transform.position = new Vector3(_ship.transform.position.x, transform.position.y, transform.position.z);
+        if (_ship != null)
+        {
+            transform.position = new Vector3(_ship.transform.position.x, transform.position.y, transform.position.z);
+        }
     }
 
     private void Update()
     {
-        transform.position = new Vector3(_ship.transform.position.x, transform.position.y, transform.position.z);
+        if (_ship != null)
+        {
+            transform.position = new Vector3(_ship.transform.position.x, transform.position.y, transform.position.z);
+        }
     }
 }

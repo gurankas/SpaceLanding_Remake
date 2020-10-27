@@ -35,6 +35,9 @@ public class BaseCharacter : MonoBehaviour
     [HideInInspector]
     public int ScoreMultiplier = 0;
 
+    [HideInInspector]
+    public bool FuelEmpty = false;
+
     private float _currentShipRotation = -90;
     private Vector2 _movement = Vector2.zero;
     private Rigidbody2D _rb;
@@ -42,8 +45,6 @@ public class BaseCharacter : MonoBehaviour
     private Animator _anim;
     private bool _useFuel = false;
     private Vector3 _startPos;
-
-    public Action<bool> onDeathTriggered;
 
     private void OnEnable()
     {
@@ -96,13 +97,15 @@ public class BaseCharacter : MonoBehaviour
         _currentShipRotation -= _movement.x;
         _currentShipRotation = Mathf.Clamp(_currentShipRotation, -_shipDirectionRange, _shipDirectionRange);
         transform.rotation = Quaternion.Euler(0, 0, _currentShipRotation);
-        //transform.Rotate(new Vector3(0, 0, _currentShipRotation) * Time.deltaTime * _movement.x, Space.World);
 
         //applies vertical force according to direction of ship
         var force = DetermineForceBasedOnRotation();
         _rb.AddForce(new Vector2(force.x, force.y));
 
-        print(_rb.velocity * 100);
+        if (Fuel == 0)
+        {
+            FuelEmpty = true;
+        }
 
         //setting variables in animators to display correct states of animations on the ship
         _anim.SetFloat("VerticalInput", _movement.y);
@@ -139,9 +142,8 @@ public class BaseCharacter : MonoBehaviour
 
     private void onDeath()
     {
-
         //reload scene
-        SceneManager.LoadScene("GurankasScene");
+        SceneManager.LoadScene("MainMenu");
     }
 
     private void OnCollisionEnter2D(Collision2D other)
