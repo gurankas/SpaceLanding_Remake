@@ -218,6 +218,12 @@ MonoBehaviour:
   _speed: 0.1
   _shipDirectionRange: 90
   _maxFuel: 1000
+  _playerMaxMinScreenHeight: 4.6
+  _angleLandingAllowance: 8
+  _speedLandingAllowance1: 10
+  _speedLandingAllowance2: 20
+  _speedLandingAllowance3: 30
+  ScoreMultiplier: 0
 --- !u!95 &2807365049235899388
 Animator:
   serializedVersion: 3
