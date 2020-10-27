@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BaseCharacter : MonoBehaviour
 {
@@ -15,9 +16,24 @@ public class BaseCharacter : MonoBehaviour
     [SerializeField]
     private float _playerMaxMinScreenHeight = 4.6f;
 
+    [SerializeField]
+    private float _angleLandingAllowance = 5f;
+
+    [SerializeField]
+    private float _speedLandingAllowance1 = 10f;
+
+    [SerializeField]
+    private float _speedLandingAllowance2 = 20f;
+
+    [SerializeField]
+    private float _speedLandingAllowance3 = 30f;
+
     public int Fuel { get; protected set; }
     public int Time { get; protected set; }
     public int Score { get; protected set; }
+
+    [HideInInspector]
+    public int ScoreMultiplier = 0;
 
     private float _currentShipRotation = -90;
     private Vector2 _movement = Vector2.zero;
@@ -25,7 +41,7 @@ public class BaseCharacter : MonoBehaviour
     private SpriteRenderer _flameSprite;
     private Animator _anim;
     private bool _useFuel = false;
-    private bool _isDead = false;
+    private Vector3 _startPos;
 
     public Action<bool> onDeathTriggered;
 
@@ -36,6 +52,7 @@ public class BaseCharacter : MonoBehaviour
         _flameSprite = GetComponentInChildren<Flame>().GetComponent<SpriteRenderer>();
         _flameSprite.gameObject.SetActive(false);
         Fuel = _maxFuel;
+        _startPos = transform.position;
 
         Time = 0;
         InvokeRepeating("AddTime", 1, 1);
@@ -44,6 +61,18 @@ public class BaseCharacter : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, _currentShipRotation);
 
         //TODO apply inital force to make the ship
+        _rb.AddForce(new Vector2(10, 0));
+    }
+
+    private void SuccessfulLanding()
+    {
+        transform.position = _startPos;
+        _rb.velocity = Vector2.zero;
+        //init player ship rotation to the right
+        transform.rotation = Quaternion.Euler(0, 0, _currentShipRotation);
+
+        //TODO apply inital force to make the ship
+        _rb.AddForce(new Vector2(10, 0));
     }
 
     private void Update()
@@ -73,17 +102,10 @@ public class BaseCharacter : MonoBehaviour
         var force = DetermineForceBasedOnRotation();
         _rb.AddForce(new Vector2(force.x, force.y));
 
-        //print(_movement.y);
+        print(_rb.velocity * 100);
 
         //setting variables in animators to display correct states of animations on the ship
         _anim.SetFloat("VerticalInput", _movement.y);
-
-        //test code
-        if (Input.GetKeyDown(KeyCode.Backspace))
-        {
-            _anim.SetTrigger("Dead");
-            _isDead = true;
-        }
     }
 
     private void FixedUpdate()
@@ -117,12 +139,45 @@ public class BaseCharacter : MonoBehaviour
 
     private void onDeath()
     {
-        _isDead = true;
-        onDeathTriggered.Invoke(_isDead);
+
+        //reload scene
+        SceneManager.LoadScene("GurankasScene");
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
-        print("collided");
+        //Debug.LogError($"Collided with terrain {other.relativeVelocity}");
+        //Check angle, then velocity, then area check
+        if (IsBetween((transform.rotation.z * 100), -_angleLandingAllowance, _angleLandingAllowance))
+        {
+            if (Mathf.Abs(other.relativeVelocity.y * 100) < _speedLandingAllowance1)
+            {
+                //perfect landing here
+                Score += 1 * 100 * ScoreMultiplier;
+                Invoke("SuccessfulLanding", 1);
+                return;
+            }
+            else if (Mathf.Abs(other.relativeVelocity.y * 100) < _speedLandingAllowance2)
+            {
+                //worse landing here
+                Score += (int)(.5 * 100 * ScoreMultiplier);
+                Invoke("SuccessfulLanding", 1);
+                return;
+            }
+            else if (Mathf.Abs(other.relativeVelocity.y * 100) < _speedLandingAllowance3)
+            {
+                //worst landing here
+                Score += (int)(.25 * 100 * ScoreMultiplier);
+                Invoke("SuccessfulLanding", 1);
+                return;
+            }
+        }
+        //destroy here
+        _anim.SetTrigger("Dead");
+    }
+
+    private bool IsBetween(float testValue, float bound1, float bound2)
+    {
+        return (testValue >= Math.Min(bound1, bound2) && testValue <= Math.Max(bound1, bound2));
     }
 }
